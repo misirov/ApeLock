@@ -83,9 +83,14 @@ contract ApeLock {
         @param   _addr: List of trusted addressess.
     */
     constructor(address[] memory _addr){
-        for(uint i = 0; i < _addr.length; i++ ){
+        uint i;
+        uint len = _addr.length;
+        for(; i < len; ){
             address add = _addr[i];
             trustedAddress[add] = true;
+            unchecked {
+                ++i;
+            }
         }
     }
 
@@ -138,7 +143,7 @@ contract ApeLock {
         require(a.votes >= MIN_VOTES, "not enough votes");
         uint256 balance = apeLockBalance();
         usdc.transferFrom(address(this), msg.sender, balance);
-        winner = msg.sender;
+        apeWinner = msg.sender;
 
         emit winnerWithdrawed(msg.sender, balance);
     }
